@@ -17,8 +17,8 @@ main proc
     lea dx, msg3          ; msg3 load into dx
     int 21h               ; dos interrupt
     
-    mov al, a             ; Move value of a into al 
-    mov bl, b             ; Move value of a into bl
+    mov al, msg1             ; Move value of a into al 
+    mov bl, msg2             ; Move value of a into bl
      
     sub al, bl            ; subtruction bl from al. msg1 - msg2
     
