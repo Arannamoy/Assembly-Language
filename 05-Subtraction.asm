@@ -2,9 +2,9 @@
 .stack 100h               ; 256 bytes for stack
 
 .data                    
-msg1 db 5                ; msg1 with store 3
-msg2 db 3                ; msg2 with store 5
-msg3 db 10,13,'Result: $' ; msg3 to show result
+msg1 db 9                ; msg1 with store 3
+msg2 db 4                ; msg2 with store 5
+msg3 db 10,13,'Result: $' ; msg3 show result
     
 .code                     
 
@@ -17,8 +17,8 @@ main proc
     lea dx, msg3          ; msg3 load into dx
     int 21h               ; dos interrupt
     
-    mov al, msg1             ; Move value of a into al 
-    mov bl, msg2             ; Move value of a into bl
+    mov al, msg1          ; value of msg1 into al 
+    mov bl, msg2          ; value of msg2 into bl
      
     sub al, bl            ; subtruction bl from al. msg1 - msg2
     
@@ -28,7 +28,7 @@ main proc
     mov ah, 2             ; print character
     int 21h               ; dos interrupt
     exit:
-        mov ah, 4ch           ; terminate program
+        mov ah, 4ch       ; terminate program
         int 21h               
     
 main endp ;end main procedure           
