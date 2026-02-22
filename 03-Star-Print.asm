@@ -7,7 +7,7 @@
 .code
 main proc
 
-    mov ax, @data           ; load address of data segment into ax
+    mov ax, @data           ; load data segment into ax
     mov ds, ax              ; load ax into ds
     
 
