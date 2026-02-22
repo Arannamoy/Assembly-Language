@@ -2,19 +2,34 @@
 .stack 100h   ; for memory size 256 bytes 
 
 .data
-msg  db 'Number of rows: $'  ; for display message 
-
+msg  db 'Input: $'  ; for display message 
+msg1 db 'Output: $'
 .code ; start code segment
 main proc ; start main process
 
     mov ax, @data   ; load data segment into ax
     mov ds, ax      ; move ax into ds 
     
+    mov ah,1
+    int 21h
+    sub al,30h
+    mov cl,al
+
+    mov dl,10
+    mov ah,2
+    mov dl.13
+    int 21h
 
     mov ah, 9       ; print 
-    lea dx, msg     ; load address of msg into dx
+    lea dx, msg1     ; load address of msg into dx
     int 21h         ; interrupt for display message
 
+    mov dl,10
+    mov ah,2
+    int 21h
+    mov dl,13
+    int 21h
+    
     mov ah, 1       ; read single character
     int 21h         ; Wait for user input 
 
