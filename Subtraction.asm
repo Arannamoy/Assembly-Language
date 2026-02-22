@@ -31,5 +31,5 @@ main proc
         mov ah, 4ch           ; terminate program
         int 21h               
     
-main endp                 
-end main                  
+main endp ;end main procedure           
+end main  ; end main execution            
