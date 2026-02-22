@@ -15,6 +15,10 @@ main proc
     lea dx,msg0
     int 21h
 
+    mov ah,1
+    int 21h
+    sub al,30h
+    mov bl,al
     exit:
     mov ah,4ch
     int 21h
