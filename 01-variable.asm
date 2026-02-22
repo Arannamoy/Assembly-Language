@@ -12,3 +12,9 @@ main proc
     add msg,48
     mov dl,msg
     int 21h
+    exit:
+    mov ah,4ch
+    int 21h
+    main endp
+
+end  main
