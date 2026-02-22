@@ -28,7 +28,7 @@ main proc
     mov ah, 2             ; print character
     int 21h               ; dos interrupt
     exit:
-        mov ah, 4ch           ; Terminate program
+        mov ah, 4ch           ; terminate program
         int 21h               
     
 main endp                 
