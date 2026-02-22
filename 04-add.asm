@@ -3,7 +3,7 @@
 
 .data                    
 msg1 db 3                ; msg1 with store 3
-msg2 db 5                ; msg1 with store 5
+msg2 db 5                ; msg2 with store 5
 
 msg3 db 10,13,'Result: $' ; msg3 show result
     
@@ -11,7 +11,7 @@ msg3 db 10,13,'Result: $' ; msg3 show result
 
 main proc                 
     
-    mov ax, @data         ; load address of data segment into ax
+    mov ax, @data         ; load data segment into ax
     mov ds, ax            ; load ax into ds
     
     mov ah, 9             ; print string

@@ -10,7 +10,7 @@ msg3 db 10,13,'Result: $' ; msg3 show result
 
 main proc                 
     
-    mov ax, @data         ; load address of data segment into ax
+    mov ax, @data         ; load data segment into ax
     mov ds, ax            ; load ax into ds
     
     mov ah, 9             ; print string
