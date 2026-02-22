@@ -1,72 +1,56 @@
-.model small
-.stack 100h
+.model small          ; use small memory model
+.stack 100h           ; allocate 256 bytes stack
 
 .data
-msg   db 'Input: $'       ; Input label
-msg1  db 'Output: $'      ; Output label
+inputMsg   db 'Input: $'                ; message for input
+outputMsg  db 13,10,'Output:',13,10,'$' ; output header with newline
 
 .code
 main proc
-    mov ax, @data
-    mov ds, ax           ; Initialize data segment
 
-    ; ----------------------------
-    ; Print Input label
+    mov ax, @data      ; initialize data segment
+    mov ds, ax
+
+
     mov ah, 9
-    lea dx, msg
+    lea dx, inputMsg
     int 21h
 
-    ; Read single character input
-    mov ah, 1
-    int 21h
-    sub al, 30h          ; Convert ASCII to number
-    mov cl, al           ; CL = total rows
+   
+    mov ah, 1          ; function 1 = read character
+    int 21h            ; wait for key press
+    sub al, 30h        ; convert ASCII to numeric
+    mov si, ax         ; store value in SI (low byte used)
 
-    ; Newline after input
-    mov dl, 10           ; Line Feed
-    mov ah, 2
-    int 21h
-    mov dl, 13           ; Carriage Return
-    int 21h
-
-    ; ----------------------------
-    ; Print Output label
+ 
     mov ah, 9
-    lea dx, msg1
+    lea dx, outputMsg
     int 21h
 
-    ; Newline after Output:
-    mov dl, 10
-    mov ah, 2
-    int 21h
-    mov dl, 13
-    int 21h
+   
+next_row:
 
-    ; ----------------------------
-    ; Outer loop for rows
-outer_loop:
-    mov ch, cl           ; CH = stars in current row
+    mov cx, si         ; CX = current star count
 
-    ; Inner loop to print stars
 print_star:
-    mov dl, '*'          ; Character to print
+
+    mov dl, '*'        ; load star symbol
+    mov ah, 2          ; function 2 = print single char
+    int 21h
+
+    loop print_star    ; repeat until CX = 0
+
+
+    mov dl, 13         ; carriage return
     mov ah, 2
     int 21h
-    dec ch
-    jnz print_star       ; Repeat until row complete
 
-    ; Newline after each row
-    mov dl, 10
-    mov ah, 2
-    int 21h
-    mov dl, 13
+    mov dl, 10         ; line feed
     int 21h
 
-    dec cl               ; Decrease row counter
-    jnz outer_loop       ; Repeat outer loop until CL=0
+    dec si             ; decrease row count
+    jnz next_row       ; repeat if not zero
 
-    ; ----------------------------
-    ; Terminate program
     mov ah, 4Ch
     int 21h
 
