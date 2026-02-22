@@ -35,12 +35,18 @@ main proc
 
     add al,30
 
+    mov dl,10
+    mov ah,2
+    int 21h
+
     mov ah,9
     lea dx,msg2
     int 21h
 
     mov dl,al
     mov ah,2
+    int 21h
+    mov dl,13
     int 21h
 
     exit:
