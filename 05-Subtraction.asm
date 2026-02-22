@@ -2,8 +2,8 @@
 .stack 100h               ; 256 bytes for stack
 
 .data                    
-msg1 db 3                ; msg1 with store 3
-msg2 db 5                ; msg2 with store 5
+msg1 db 5                ; msg1 with store 3
+msg2 db 3                ; msg2 with store 5
 msg3 db 10,13,'Result: $' ; msg3 to show result
     
 .code                     
