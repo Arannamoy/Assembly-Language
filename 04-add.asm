@@ -1,19 +1,30 @@
-.model small
-.stack 100h
+; Q2: Add Two Numbers
+.MODEL SMALL
+.DATA
+    NUM1 DB 3       ; First variable [cite: 24]
+    NUM2 DB 5       ; Second variable [cite: 24]
+    MSG DB 'Sum=$'  ; Output message [cite: 25]
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
 
-.data
-msg0 db 'Variables: num1 =$'
-msg1 db ',num2=$'
-msg2 db 'Output: Result =$'
+    ; Addition [cite: 22]
+    MOV AL, NUM1
+    ADD AL, NUM2    ; AL = 3 + 5 = 8
+    ADD AL, 48      ; Convert result back to ASCII
 
+    ; Display Message
+    MOV AH, 09H
+    LEA DX, MSG
+    INT 21H
 
-.code
-main proc:
-    mov ax,@data
-    mov ds,ax
+    ; Display Result
+    MOV DL, AL
+    MOV AH, 02H
+    INT 21H
 
-    mov ah,9
-    lea dx,msg0
-    int 21h
-
-    
+    MOV AH, 4CH
+    INT 21H
+MAIN ENDP
+END MAIN
