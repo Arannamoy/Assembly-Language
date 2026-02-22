@@ -5,7 +5,7 @@
 msg1 db 3                ; msg1 with store 3
 msg2 db 5                ; msg2 with store 5
 
-msg3 db 10,13,'Result: $' ; msg3 show result
+msg3 db 10,13,'Output: Sum= $' ; msg3 show result
     
 .code                     
 

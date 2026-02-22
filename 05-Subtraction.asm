@@ -4,7 +4,7 @@
 .data                    
 msg1 db 9                ; msg1 with store 3
 msg2 db 4                ; msg2 with store 5
-msg3 db 10,13,'Result: $' ; msg3 show result
+msg3 db 10,13,'Output: Result= $' ; msg3 show result
     
 .code                     
 
