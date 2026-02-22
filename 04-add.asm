@@ -19,8 +19,30 @@ main proc
     int 21h
     sub al,30h
     mov bl,al
+
+    mov ah,8
+    lea dx,msg1
+    int 21h
+
+    mov ah,1
+    int 21h
+    sub al,30h
+    mov bh,al
+
+
+    mov al,bl
+    add al,bh
+
+    add al,30
+
+    mov ah,9
+    lea dx,msg2
+    int 21h
+    mov dl,al
+    mov ah,9
+    int 21h
     exit:
-    mov ah,4ch
+    mov ah,4Ch
     int 21h
 main endp
 end main
