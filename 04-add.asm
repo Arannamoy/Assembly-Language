@@ -38,9 +38,11 @@ main proc
     mov ah,9
     lea dx,msg2
     int 21h
+
     mov dl,al
-    mov ah,9
+    mov ah,2
     int 21h
+
     exit:
     mov ah,4Ch
     int 21h
