@@ -1,53 +1,78 @@
-; Q1: Star Pattern (Reverse Triangle)
-.MODEL SMALL
-.STACK 100H
+; --------------------------------------------------------------
+; Q2 – Take two one‑digit numbers from the user, add them,
+;      and display:  Result = <sum>
+; --------------------------------------------------------------
+.MODEL  SMALL               ; 64 KB‑এর মধ্যে কোড + ডেটা
+.STACK  100h                ; 256‑বাইট স্ট্যাক (প্রয়োজনমতো)
+
 .DATA
-    PROMPT DB 'Enter number of rows: $'
-    NEWLINE DB 0DH, 0AH, '$'
-    ROWS DW ?
+    promptA DB 'Enter first digit (0‑9): $'
+    promptB DB 'Enter second digit (0‑9): $'
+    resultMsg DB 0Dh,0Ah,'Result = $'   ; CR+LF, তারপর “Result = ”
+    nl      DB 0Dh,0Ah,'$'              ; শেষের নিউ‑লাইন (ঐচ্ছিক)
+
 .CODE
 MAIN PROC
-    MOV AX, @DATA
-    MOV DS, AX
+    ; ---------- DS‑রেজিস্টার ইনিশিয়ালাইজ ----------
+    MOV     AX, @DATA
+    MOV     DS, AX
 
-    ; Display Prompt [cite: 11]
-    MOV AH, 09H
-    LEA DX, PROMPT
-    INT 21H
+    ; ---------- প্রথম অঙ্ক পড়া ----------
+    MOV     AH, 9               ; DOS‑ফাংশন 9 – $‑সীমাবদ্ধ স্ট্রিং প্রিন্ট
+    LEA     DX, promptA
+    INT     21h
 
-    ; Take Input (Single digit) [cite: 13]
-    MOV AH, 01H
-    INT 21H
-    SUB AL, 48      ; Convert ASCII to Integer
-    MOV AH, 0
-    MOV ROWS, AX
+    MOV     AH, 1               ; DOS‑ফাংশন 1 – একটি কী‑স্ট্রোক (ASCII) পড়া
+    INT     21h                  ; AL ← ব্যবহারকারীর ইনপুট (ASCII)
+    SUB     AL, '0'              ; ASCII → সংখ্যা (0‑9)
+    MOV     BL, AL               ; BL ← প্রথম সংখ্যা রাখি
 
-    MOV AH, 09H
-    LEA DX, NEWLINE
-    INT 21H
+    ; ---------- দ্বিতীয় অঙ্ক পড়া ----------
+    MOV     AH, 9
+    LEA     DX, promptB
+    INT     21h
 
-    ; Outer Loop (Rows) [cite: 9]
-    MOV CX, ROWS
-OUTER_LOOP:
-    PUSH CX         ; Save outer loop counter
-    
-    ; Inner Loop (Stars) [cite: 11]
-INNER_LOOP:
-    MOV AH, 02H
-    MOV DL, '*'     ; Print star [cite: 15]
-    INT 21H
-    LOOP INNER_LOOP
+    MOV     AH, 1
+    INT     21h                  ; AL ← দ্বিতীয় ইনপুট (ASCII)
+    SUB     AL, '0'              ; ASCII → সংখ্যা
+    MOV     BH, AL               ; BH ← দ্বিতীয় সংখ্যা
 
-    ; Print Newline after each row
-    MOV AH, 09H
-    LEA DX, NEWLINE
-    INT 21H
+    ; ---------- যোগফল হিসাব ----------
+    ADD     BL, BH               ; BL ← BL + BH  (0‑18 পর্যন্ত)
 
-    POP CX          ; Restore outer loop counter
-    LOOP OUTER_LOOP
+    ; ---------- ফলাফল মুদ্রণ ----------
+    ; “Result = ” টেক্সট
+    MOV     AH, 9
+    LEA     DX, resultMsg
+    INT     21h
 
-    ; Exit
-    MOV AH, 4CH
-    INT 21H
+    ; যোগফল (BL) → ASCII‑তে রূপান্তর এবং প্রিন্ট
+    MOV     AL, BL
+    CMP     AL, 9
+    JBE     ONE_DIGIT            ; যদি ≤9 হয়, সরাসরি ১‑ডিজিট ASCII
+
+    ; ১০‑১৯ (দুই‑ডিজিট) হলে “1” এবং “0‑9” দুটো অক্ষর প্রিন্ট করতে হবে
+    ;   10 → "10", 11 → "11", … , 18 → "18"
+    ; প্রথম অঙ্ক সবসময় ‘1’
+    MOV     DL, '1'
+    MOV     AH, 2               ; DOS‑ফাংশন 2 – এক ক্যারেক্টার আউটপুট
+    INT     21h
+
+    ; বাকি অঙ্ক (0‑9) বের করা
+    SUB     AL, 10              ; 10‑19 → 0‑9
+ONE_DIGIT:
+    ADD     AL, '0'             ; সংখ্যা → ASCII
+    MOV     DL, AL
+    MOV     AH, 2
+    INT     21h
+
+    ; (ঐচ্ছিক) শেষের নিউ‑লাইন
+    MOV     AH, 9
+    LEA     DX, nl
+    INT     21h
+
+    ; ---------- প্রোগ্রাম সমাপ্তি ----------
+    MOV     AH, 4Ch              ; DOS‑ফাংশন 4C – প্রোগ্রাম টার্মিনেট
+    INT     21h
 MAIN ENDP
-END MAIN
+END  MAIN
