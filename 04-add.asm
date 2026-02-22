@@ -20,7 +20,7 @@ main proc
     sub al,30h
     mov bl,al
 
-    mov ah,8
+    mov ah,9
     lea dx,msg1
     int 21h
 
