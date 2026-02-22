@@ -1,71 +1,58 @@
-.model small  ; for small memory model 
-.stack 100h   ; for memory size 256 bytes 
+.model small                ; Use small memory model 
+.stack 100h                 ; Allocate 256 bytes for stack
 
 .data
-msg  db 'Input: $'  ; for display message 
-msg1 db 'Output: $'
-.code ; start code segment
-main proc ; start main process
+    msg  db 'Enter number of rows: $'   ; Message to display 
 
-    mov ax, @data   ; load data segment into ax
-    mov ds, ax      ; move ax into ds 
+.code
+main proc
+
+    mov ax, @data           ; Load address of data segment into ax
+    mov ds, ax              ; Initialize ds with data segment address
     
-    mov ah,1
-    int 21h
-    sub al,30h
-    mov cl,al
 
-    mov dl,10
-    mov ah,2
-    mov dl.13
-    int 21h
+    mov ah, 9               ; print string
+    lea dx, msg             ; Load address of msg into dx
+    int 21h                 ; Calling interrupt to display msg
 
-    mov ah, 9       ; print 
-    lea dx, msg1     ; load address of msg into dx
-    int 21h         ; interrupt for display message
+    mov ah, 1               ; Read single character
+    int 21h                 ; Wait for user input 
 
-    mov dl,10
-    mov ah,2
-    int 21h
-    mov dl,13
-    int 21h
-    
-    mov ah, 1       ; read single character
-    int 21h         ; Wait for user input 
-
-    sub al, 30h     ; subtract 30h from al due to conversion of ASCII 
-    mov cl, al      ; store rows in cl
+    sub al, 30h             ; Convert ASCII to number
+    mov cl, al              ; Store number of rows in cl
 
     
-    mov dl, 10      ; line feed 
-    mov ah, 2       ; print character
-    int 21h         ; dos interrupt call
-    mov dl, 13      ; Carriage Return 
-    int 21h         ; dos interrupt call
+    mov dl, 10              ; Line Feed 
+    mov ah, 2               ; Print character
+    int 21h
+    mov dl, 13              ; Carriage Return 
+    int 21h
 
 outer:                      
-    mov ch, 0       ; clear ch register
-    mov ch, cl      ; copy row count to ch 
+
+    mov ch, 0               ; Clear ch register
+    mov ch, cl              ; Copy row count to ch 
 
 print:                      
-    mov dl, '*'     ; load '*' character into dl
-    mov ah, 2       ; print character
-    int 21h         ; interrupt call for printing *
 
-    dec ch          ; decrease star counter
-    jnz print       ; jump not zero repeat printing stars otherwise next line
+    mov dl, '*'             ; Load '*' character into dl
+    mov ah, 2               ; Print character
+    int 21h                 ; Print '*'
 
-    mov dl, 10      ; for line feed
-    mov ah, 2       ; print character
-    int 21h         ; interrupt call
-    mov dl, 13      ; carriage return
-    int 21h         ; interrupt call 
+    dec ch                  ; Decrease star counter
+    jnz print               ; If ch != 0, repeat printing stars
 
-    dec cl          ; decrease row counter
-    jnz outer       ; go back to outer loop
+    mov dl, 10              ; Line Feed
+    mov ah, 2
+    int 21h
+    mov dl, 13              ; Carriage Return
+    int 21h
 
-    mov ah, 4ch     ; terminate program
-    int 21h         ; interrupt call
+    dec cl                  ; Decrease row counter
+    jnz outer               ; If cl != 0, go back to outer loop
+
+    mov ah, 4ch             ; Terminate program
+    int 21h                 
 
 main endp
 end main
